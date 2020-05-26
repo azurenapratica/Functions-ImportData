@@ -1,0 +1,8 @@
+.DS_Store
+.vscode
+.vs
+*.suo
+*.user
+bin
+obj
+local.settings.json
