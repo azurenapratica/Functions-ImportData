@@ -3,8 +3,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
-using System.Configuration;
-using System.Threading.Tasks;
 using System;
 
 namespace AzNaPratica

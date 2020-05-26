@@ -1,8 +1,8 @@
-using System.Collections;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace AzNaPratica
 {
-    public class Company
+    public class Company : TableEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
