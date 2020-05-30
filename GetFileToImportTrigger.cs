@@ -15,23 +15,17 @@ namespace AzNaPratica
         {
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
 
-            try{
-                using (var sr = new StreamReader(myBlob))
-                {
-                    var companies = new List<Company>();
-                    while (!sr.EndOfStream)
-                    {
-                        var line = await sr.ReadLineAsync();
-                        var values = line.Split(";");
-                        companies.Add(new Company() { Code = values[0], Name = values[1], CNPJ = values[2] });
-                    }
-                    var companiesData = JsonConvert.SerializeObject(companies);
-                    await queueItem.AddAsync(companiesData);
-                }
-            }
-            catch
+            using (var sr = new StreamReader(myBlob))
             {
-                throw;
+                var companies = new List<Company>();
+                while (!sr.EndOfStream)
+                {
+                    var line = await sr.ReadLineAsync();
+                    var values = line.Split(";");
+                    companies.Add(new Company() { Code = values[0], Name = values[1], CNPJ = values[2] });
+                }
+                var companiesData = JsonConvert.SerializeObject(companies);
+                await queueItem.AddAsync(companiesData);
             }
         }
     }

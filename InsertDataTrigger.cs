@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using System;
+using Dapper;
 
 namespace AzNaPratica
 {
@@ -15,23 +16,13 @@ namespace AzNaPratica
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
 
             var companies = JsonConvert.DeserializeObject<List<Company>>(myQueueItem);
-            var strSQL = string.Empty; 
-
-            foreach (var item in companies)
-            {
-                strSQL += $"INSERT INTO Company (Code, Name, CNPJ) VALUES ('{ item.Code }', '{ item.Name }', '{ item.CNPJ }');";
-            }
 
             var strConn = Environment.GetEnvironmentVariable("SQLConnectionString");
 
-            using (var conn = new SqlConnection(strConn))
+            using(var connection = new SqlConnection(strConn))
             {
-                conn.Open();
-                using (var cmd = new SqlCommand(strSQL, conn))
-                {
-                    var rows = cmd.ExecuteNonQuery();
-                    log.LogInformation($"Rows inserted: {rows}");
-                }
+                connection.Open();
+                connection.Execute("INSERT INTO [Company] (Code, Name, CNPJ) VALUES(@Code, @Name, @CNPJ)", companies); 
             }
         }
     }
